@@ -19,5 +19,5 @@ model User {
   email    String? @unique
   phone    String? @unique
   avatar   String?
-  password String  @ignore
+  password String
 }
