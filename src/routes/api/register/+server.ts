@@ -3,7 +3,6 @@ import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types"
 
 import bcrypt from "bcryptjs"
-import type { User } from "@prisma/client";
 import prisma from "$lib/server/db";
 
 const registerDto = z.object({
@@ -28,7 +27,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
     if (!success) {
         return new Response(JSON.stringify({ "message": "Bad request", "error": error.errors[0].message }), { status: 400 })
     }
-    // cookies.set("fsdgfdsfgfd", "fdsfs", { sameSite: false, path: '/' })
+
     const dup = await prisma.user.findFirst({
         where: { username: dto.username }
     })
@@ -47,5 +46,5 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
         }
     })
 
-    return json({ id: created.id }, { status: 200 })
+    return json({ id: created.id }, { status: 201 })
 }
