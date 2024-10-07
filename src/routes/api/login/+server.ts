@@ -6,6 +6,7 @@ import type { RequestHandler } from "./$types"
 import jwt from "jsonwebtoken"
 import prisma from "$lib/server/db"
 import bcrypt from 'bcryptjs';
+import { constants } from "$lib/consts"
 
 const loginDto = z.object({
     email: z.string({ message: "Email is empty" }).email("Incorrect email"),
@@ -46,11 +47,9 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
     const payload = { username: user.username, sub: user.id }
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "4d" })
 
-    const data = jwt.decode(token)
-
     const date = new Date();
     const cookieExpires = date.setDate(date.getDate() + 4)
 
-    cookies.set("t_sso_token", token, { sameSite: false, path: '/', expires: new Date(cookieExpires) })
-    return json({ token, data }, { status: 200 })
+    cookies.set(constants.TOKEN_NAME, token, { sameSite: false, path: '/', expires: new Date(cookieExpires) })
+    return json({ "message": "Success" }, { status: 200 })
 }

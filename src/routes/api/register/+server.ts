@@ -11,7 +11,7 @@ const registerDto = z.object({
     email: z.string({ message: "Email field is empty" }).email("Incorrect email provided"),
 })
 
-export const POST: RequestHandler = async ({ request, cookies }) => {
+export const POST: RequestHandler = async ({ request }) => {
     let reqData: any;
     try {
         reqData = await request.json();
